@@ -61,3 +61,44 @@ app.listen(port, async () => {
 app.get('/health',   (req, res) => {
   res.status(200).json({ status: 'OK' });
 });
+
+app.get('/example', async (req, res) => {
+  try {
+    
+    const insertQuery = `
+      INSERT INTO minha_tabela (nome)
+      VALUES (?)
+    `;
+    const [insertResult] = await pool.query(insertQuery, ["Exemplo de Nome"]);
+    console.log("Novo registro inserido com ID:", insertResult.insertId);
+
+    
+    const [rows] = await pool.query("SELECT * FROM minha_tabela");
+    console.log("Registros recuperados:", rows);
+
+    
+    res.status(200).json({
+      message: "Exemplo concluído com sucesso!",
+      insertedId: insertResult.insertId,
+      data: rows,
+    });
+  } catch (err) {
+    console.error("Erro na rota /example:", err);
+    res.status(500).json({ error: "Erro ao processar a solicitação." });
+  }
+});
+
+app.get('/ready', async (req, res) => {
+  try {
+    // Verifica se a conexão com o banco de dados está funcionando
+    const [rows] = await pool.query("SELECT 1 AS status");
+    if (rows[0].status === 1) {
+      res.status(200).json({ status: 'READY', message: 'Application is ready to handle traffic.' });
+    } else {
+      res.status(500).json({ status: 'NOT READY', message: 'Database connection check failed.' });
+    }
+  } catch (err) {
+    console.error("Error in /ready route:", err);
+    res.status(500).json({ status: 'NOT READY', message: 'Error connecting to the database.' });
+  }
+});
