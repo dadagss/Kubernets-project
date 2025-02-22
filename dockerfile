@@ -1,19 +1,21 @@
-FROM node:current-alpine3.21 AS build
+FROM node:18-alpine AS build
 
 WORKDIR /usr/src/app
 
-COPY package*.json . 
-COPY index.js .
+COPY package*.json ./
 
 RUN npm install
 
-FROM node:current-alpine3.21
+COPY . .
+
+FROM node:18-alpine
 
 WORKDIR /usr/src/app
 
-COPY --from=build /usr/src/app .
+COPY --from=build /usr/src/app/package*.json ./
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/index.js ./
 
-EXPOSE 3000
+EXPOSE 3001
 
 CMD ["node", "index.js"]
-
