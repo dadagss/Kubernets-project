@@ -58,7 +58,7 @@ app.listen(port, async () => {
   await createTables(); 
 });
 
-app.get('/health',   (req, res) => {
+app.get('/healthz',   (req, res) => {
   res.status(200).json({ status: 'OK' });
 });
 
@@ -88,7 +88,7 @@ app.get('/example', async (req, res) => {
   }
 });
 
-app.get('/ready', async (req, res) => {
+app.get('/readyz', async (req, res) => {
   try {
     // Verifica se a conexão com o banco de dados está funcionando
     const [rows] = await pool.query("SELECT 1 AS status");

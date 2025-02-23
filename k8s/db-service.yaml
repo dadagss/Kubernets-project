@@ -3,11 +3,12 @@ kind: Service
 
 metadata:
   name: app-js-svc
+  namespace: app-db
 
 spec:
   type: ClusterIP
   selector:
-    api: app-js
+    api: db
   ports:
-    - port: 80
-      targetPort: 3001
+    - port: 3306
+      targetPort: 3306

@@ -1,0 +1,14 @@
+apiVersion: v1 
+kind: Service 
+
+metadata:
+  name: app-js-svc
+  namespace: primeira-app
+
+spec:
+  type: ClusterIP
+  selector:
+    api: app-js
+  ports:
+    - port: 80
+      targetPort: 3001
