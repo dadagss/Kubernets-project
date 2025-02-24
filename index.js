@@ -20,12 +20,19 @@ const pool = mysql.createPool({
 // Função para criar tabelas (se não existirem)
 async function createTables() {
   try {
+    // Cria o banco de dados se ele não existir
+    await pool.query(`CREATE DATABASE IF NOT EXISTS ${process.env.DB_NAME};`);
+
+    // Seleciona o banco de dados
+    await pool.query(`USE ${process.env.DB_NAME};`);
+
+    // Cria a tabela
     const createTableQuery = `
       CREATE TABLE IF NOT EXISTS minha_tabela (
         id INT AUTO_INCREMENT PRIMARY KEY,
         nome VARCHAR(255) NOT NULL,
         data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
+      );
     `;
     await pool.query(createTableQuery);
     console.log("Tabela 'minha_tabela' criada ou já existente.");
@@ -58,13 +65,12 @@ app.listen(port, async () => {
   await createTables(); 
 });
 
-app.get('/healthz',   (req, res) => {
+app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'OK' });
 });
 
 app.get('/example', async (req, res) => {
   try {
-    
     const insertQuery = `
       INSERT INTO minha_tabela (nome)
       VALUES (?)
@@ -72,11 +78,9 @@ app.get('/example', async (req, res) => {
     const [insertResult] = await pool.query(insertQuery, ["Exemplo de Nome"]);
     console.log("Novo registro inserido com ID:", insertResult.insertId);
 
-    
     const [rows] = await pool.query("SELECT * FROM minha_tabela");
     console.log("Registros recuperados:", rows);
 
-    
     res.status(200).json({
       message: "Exemplo concluído com sucesso!",
       insertedId: insertResult.insertId,

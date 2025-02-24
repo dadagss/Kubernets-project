@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-db-access
+  namespace: desafio-db
+spec:
+  podSelector:
+    matchLabels:
+      app: db-deployment  
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: desafio-api 
+    ports:
+    - protocol: TCP
+      port: 3306
