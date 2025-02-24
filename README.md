@@ -33,11 +33,6 @@ Este projeto visa demonstrar a configuração de uma aplicação Node.js conecta
 
 ```bash
 Kubernetes-Project/
-├── api/
-│   ├── Dockerfile
-│   ├── index.js
-│   ├── package.json
-│   └── package-lock.json
 ├── k8s/
 │   ├── api-deployment.yaml
 │   ├── app-service.yaml
@@ -80,7 +75,8 @@ Kubernetes-Project/
       ```bash
       kubectl apply -f api-nodeport.yaml 
     ```
-    5. **Acessar a API:**
+
+  4. **Acessar a API:**
   - Use o comando abaixo para obter a URL de acesso à API:
     ```bash
     kind service api-nodeport-service -n desafio-api
@@ -106,7 +102,5 @@ Configurar o Service do tipo NodePort foi uma das partes mais interessantes, poi
 
 ## Referências
 [Documentação do Kubernetes](https://kubernetes.io/docs/home/)
-
-[Kind](https://kind.sigs.k8s.io)
 
 [Formação DevOps RockestSeat](https://app.rocketseat.com.br/journey/devops/contents)
